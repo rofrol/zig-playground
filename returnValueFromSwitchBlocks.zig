@@ -22,3 +22,4 @@ pub fn main() !void {
 
     print("{s}\n", .{switched});
 }
+// https://discord.com/channels/605571803288698900/1077301291736375397
