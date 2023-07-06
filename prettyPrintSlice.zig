@@ -1,3 +1,4 @@
+// https://ziggit.dev/t/how-to-apply-custom-formatting-to-slices/1066/2
 const std = @import("std");
 
 fn getReturnType(comptime function: anytype) type {
