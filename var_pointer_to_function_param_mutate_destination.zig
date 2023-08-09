@@ -6,6 +6,5 @@ pub fn main() void {
 }
 
 fn sth(p: *u8) void {
-    var a = p;
-    a.* = 1;
+    p.* = 1;
 }
