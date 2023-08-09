@@ -8,3 +8,5 @@ pub fn main() void {
 fn sth(p: *u8) void {
     p.* = 1;
 }
+
+// https://stackoverflow.com/questions/74021886/how-do-i-mutate-a-zig-function-argument
