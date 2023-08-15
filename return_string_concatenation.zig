@@ -7,7 +7,7 @@ pub fn main() !void {
     var buffer: [buffer_size]u8 = undefined;
     const result_from_convert = convert(&buffer, 105);
 
-    // std.debut.print not run when convert is called in TypeOf
+    // std.debug.print not run when convert is called in TypeOf
     //std.debug.print("\nconvert: {any}\n", .{@TypeOf(convert(&buffer, 105))});
 
     // []const u8
