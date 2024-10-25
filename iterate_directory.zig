@@ -1,4 +1,4 @@
-// cancername https://discord.com/channels/605571803288698900/1139116271791779920/1139121337756024863
+// cutename https://discord.com/channels/605571803288698900/1139116271791779920/1139121337756024863
 const std = @import("std");
 
 pub fn main() !void {

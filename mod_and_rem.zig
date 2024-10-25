@@ -7,13 +7,11 @@ const std = @import("std");
 const print = std.debug.print;
 const expect = std.testing.expect;
 pub fn main() void {
-    print("@mod(-5, 3): {}\n", .{@mod(-5, 3)});
-    print("@mod(5, 3): {}\n", .{@mod(5, 3)});
-    print("@mod(-4, 4): {}\n", .{@mod(-4, 4)});
-    print("@mod(-4.1, 4): {}\n", .{@mod(-4.1, 4)});
-    print("@mod(-5, 4): {}\n", .{@mod(-5, 4)});
-    print("@mod(-6, 4): {}\n", .{@mod(-6, 4)});
-    print("@mod(-7, 4): {}\n", .{@mod(-7, 4)});
+    var x: i8 = 4;
+    while (x >= -8) : (x -= 1) {
+        print("@mod({}, 4): {}\n", .{ x, @mod(x, 4) });
+    }
+    // print("@mod(-4.1, 4): {}\n", .{@mod(-4.1, 4)});
     print("@rem(-5, 3): {}\n", .{@rem(-5, 3)});
     print("@rem(5, 3): {}\n", .{@rem(5, 3)});
 }
