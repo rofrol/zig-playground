@@ -20,7 +20,6 @@ test "arraylist" {
     list.appendAssumeCapacity('l');
     list.appendAssumeCapacity('o');
     list.appendSliceAssumeCapacity(" World!");
-    //
     try std.testing.expect(eql(u8, list.list.items, "Hello World!"));
 }
 
