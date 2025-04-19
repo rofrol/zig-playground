@@ -25,4 +25,9 @@ pub fn main() !void {
         std.debug.print("Wrong secret: {s}: {x}\n", .{ buffer[0 .. read_bytes - 1], buffer[0 .. read_bytes - 1] });
         std.process.exit(1);
     }
+
+    const stdout_writer = std.io.getStdOut().writer();
+    var buffered_stdout = std.io.bufferedWriter(stdout_writer);
+    defer buffered_stdout.flush() catch {};
+    try buffered_stdout.writer().writeAll("INFO: user logged in\n");
 }
