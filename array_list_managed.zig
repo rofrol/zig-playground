@@ -23,6 +23,19 @@ test "arraylist" {
     try std.testing.expect(eql(u8, list.list.items, "Hello World!"));
 }
 
+test "ArrayListUnmanaged" {
+    var list: std.ArrayListUnmanaged(u8) = .empty;
+    defer list.deinit(test_allocator);
+    try list.ensureUnusedCapacity(test_allocator, 10);
+    list.appendAssumeCapacity('H');
+    list.appendAssumeCapacity('e');
+    list.appendAssumeCapacity('l');
+    list.appendAssumeCapacity('l');
+    list.appendAssumeCapacity('o');
+    list.appendSliceAssumeCapacity(" World!");
+    try std.testing.expect(eql(u8, list.items, "Hello World!"));
+}
+
 pub fn ManagedArrayList(comptime T: type) type {
     return struct {
         allocator: std.mem.Allocator,
