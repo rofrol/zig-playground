@@ -2,6 +2,7 @@
 // https://www.reddit.com/r/Zig/comments/107wh7a/running_a_zig_file_like_a_script/
 
 // https://ziggit.dev/t/zig-0-14-0-released/8890/17
+// https://chatgpt.com/c/68032bf7-4a80-800b-956d-72315183c7d5
 const std = @import("std");
 const eql = std.mem.eql;
 const test_allocator = std.testing.allocator;
@@ -9,59 +10,18 @@ const mem = std.mem;
 const Allocator = mem.Allocator;
 
 test "arraylist" {
-    const MyList = ManagedArrayList(i32);
+    const MyList = ManagedArrayList(u8);
     var list = MyList.init(test_allocator);
     defer list.deinit();
-    try list.append(10);
-    try list.ensureUnusedCapacity(1);
-    list.appendAssumeCapacity(20);
-    std.debug.print("items = {any}\n", .{list.items()});
-
-    // appendSliceAssumeCapacity
-
-    // var list = ArrayList(u8).init(test_allocator);
-    // defer list.deinit();
-    // try list.append('H');
-    // try list.append('e');
-    // try list.append('l');
-    // try list.append('l');
-    // try list.append('o');
-    // try list.appendSlice(" World!");
+    try list.ensureUnusedCapacity(10);
+    list.appendAssumeCapacity('H');
+    list.appendAssumeCapacity('e');
+    list.appendAssumeCapacity('l');
+    list.appendAssumeCapacity('l');
+    list.appendAssumeCapacity('o');
+    list.appendSliceAssumeCapacity(" World!");
     //
-    // try std.testing.expect(eql(u8, try list.items, "Hello World!"));
-}
-
-pub fn ArrayList(comptime T: type) type {
-    return struct {
-        const Self = @This();
-
-        allocator: std.mem.Allocator,
-        _underlying_array_list: std.ArrayListUnmanaged(T),
-
-        pub fn init(allocator: std.mem.Allocator) ArrayList(T) {
-            return Self{
-                .allocator = allocator,
-                ._underlying_array_list = .{},
-            };
-        }
-
-        pub fn deinit(self: *Self) void {
-            self._underlying_array_list.deinit(self.allocator);
-        }
-
-        pub fn append(self: *Self, item: T) !void {
-            try self._underlying_array_list.append(self.allocator, item);
-        }
-
-        pub fn toOwnedSlice(self: *Self) !std.ArrayListUnmanaged(T).Slice {
-            return self._underlying_array_list.toOwnedSlice(self.allocator);
-        }
-
-        pub fn appendSlice(self: *Self, items: []const T) Allocator.Error!void {
-            try self.ensureUnusedCapacity(items.len);
-            self.appendSliceAssumeCapacity(items);
-        }
-    };
+    try std.testing.expect(eql(u8, list.list.items, "Hello World!"));
 }
 
 pub fn ManagedArrayList(comptime T: type) type {
@@ -95,8 +55,15 @@ pub fn ManagedArrayList(comptime T: type) type {
             self.list.appendAssumeCapacity(value);
         }
 
-        pub fn items(self: *Self) []T {
-            return self.list.items;
+        /// Append the slice of items to the list.
+        /// Never invalidates element pointers.
+        /// Asserts that the list can hold the additional items.
+        pub fn appendSliceAssumeCapacity(self: *Self, items: []const T) void {
+            const old_len = self.list.items.len;
+            const new_len = old_len + items.len;
+            std.debug.assert(new_len <= self.list.capacity);
+            self.list.items.len = new_len;
+            @memcpy(self.list.items[old_len..][0..items.len], items);
         }
     };
 }
